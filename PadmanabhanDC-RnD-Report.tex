@@ -1,0 +1,118 @@
+%
+% LaTeX2e Style for MAS R&D and master thesis reports
+% Author: Argentina Ortega Sainz, Hochschule Bonn-Rhein-Sieg, Germany
+% Please feel free to send issues, suggestions or pull requests to:
+% https://github.com/mas-group/project-report
+% Based on the template created by Ronni Hartanto in 2003
+%
+
+% \documentclass[thesis]{mas_report}
+ \documentclass[rnd]{mas_report}
+
+% ****************************************************
+% THIS INFORMATION SHOULD BE UPDATED FOR YOUR REPORT
+% ****************************************************
+\author{Deepan Chakravarthi Padmanabhan}
+\title{Towards smart coupling in multiphysics simulation}
+\supervisors{%
+Prof. Dr. Paul G. Pl\"oger\\ %Plöger
+Ing.-Inf. Pascal Bayrasy\\
+M.Sc. Ahmad Delforouzi
+}
+\date{January 2020}
+
+
+\thirdpartylogo{images/fraunhofer-logo.png}
+
+% Please add the following required packages to your document preamble:
+\usepackage[ruled,vlined]{algorithm2e} % For algorithms
+\usepackage[bottom]{footmisc}
+\usepackage{graphicx}
+\usepackage{afterpage}
+\setcounter{footnote}{0}
+\usepackage{xcolor}
+\usepackage{lscape} % For table landscape view
+\usepackage[nottoc]{tocbibind} % To add list of tables and figures to toc
+\usepackage[style=super4col, acronym]{glossaries}
+
+
+\begin{document}
+\frontmatter
+\begin{titlepage}
+    \maketitle
+\end{titlepage}
+
+%----------------------------------------------------------------------------------------
+%	PREFACE
+%----------------------------------------------------------------------------------------
+
+\pagestyle{plain}
+
+
+\cleardoublepage
+\statementpage
+
+\begin{abstract}
+
+Multiphysics simulation is the study of the interaction between multiple physical domains. An example of multiphysics simulation is Fluid-Structure Interaction (FSI). The systems integrating multiple physical domains are called coupled systems. To understand and design coupled systems, the simulations are carried out in a coupling tool.
+
+Being an integral part of various academic and industrial applications, the coupling tool is highly parameterized. The parameters govern the accuracy and time taken for the simulation. The process of manually tuning the optimal parameter configuration is a tedious task given the number of parameters, types of parameters, domain expertise of the users, and the substantial time taken to solve a single simulation instance.
+
+This research work focuses on improving the robustness of the coupling tool by automatically configuring the parameters with optimal values. The proposed methodology is based on an Automated Algorithm Configuration (AAC) approach incorporating Sequential Model-based Algorithm Configuration (SMAC), a variant of Bayesian Optimization (BO) followed by a machine learning model to predict the optimal parameter configurations. The approach is evaluated on the Mesh-based parallel Code Coupling Interface (MpCCI) developed by the Fraunhofer Institute for Algorithms and Scientific Computing (SCAI).
+
+A preliminary multiphysics simulation dataset for machine learning and feature extraction package is developed. SMAC provides a 24.92\% mean reduction in the runtime of a simulation instance compared to the runtime of default configurations by performing per-instance optimization with a repeatability coefficient of 19.34 seconds. Furthermore, this work contributes a 'Smart coupling tool' for suggesting three optimal parameter configurations given a simulation problem. The parameter configurations suggested by Random Forest (RF) and Gradient Boosting Machine (GBM) outperform the default configurations on unseen critical instances. 
+
+\end{abstract}
+
+\begin{acknowledgements}
+I thank my supervisors Prof. Dr. Paul G. Pl\"oger, Ing.-Inf. Pascal Bayrasy, and M.Sc. Ahmad Delforouzi, for providing the opportunity to work on this Research and Development project. I extend my warm gratitude towards Mr. Klaus Wolf for recruiting me at Fraunhofer SCAI. I gratefully thank M. Sc. Hamid Arjmandi for being the backbone of this project, from guiding throughout the project to motivating me at tough times. I sincerely thank M.Sc. Santosh Thoduka, M.Sc. Deebul Nair, and M.Sc. Alex Mitrevski for their continuous guidance and valuable support throughout the entire duration of this project.
+
+I thank Arumuga Vinayagam, Anitha Raj Lakshmi, Deepthishre Gunashekar, Iswariya Manivannan, Kishaan, Lokesh, Mihir, Mohandass, Naresh, Pradheep, Pritesh, Raghuvir, Rubanraj, Sathiya Ramesh, Santosh Reddy, Senthilkumar, Swaroop, and Umer for their constant support, constructive criticism and motivation.
+
+Finally, I extend my love to my parents, brother, and friends for their enduring support, undying inspiration, and endless encouragement.
+\end{acknowledgements}
+
+\tableofcontents
+\chapter*{\glossaryname}
+\markboth{\glossaryname}{}
+\addcontentsline{toc}{chapter}{\glossaryname}
+\setglossarysection{section}
+\renewcommand{\glossarysection}[2][]{}
+\printglossary[type=\acronymtype, nonumberlist]
+\listoffigures
+\listoftables
+%-------------------------------------------------------------------------------
+%	CONTENT CHAPTERS
+%-------------------------------------------------------------------------------
+
+\mainmatter % Begin numeric (1,2,3...) page numbering
+
+\pagestyle{mainmatter}
+\subfile{chapters/ch01_introduction}
+\subfile{chapters/ch02_background}
+\subfile{chapters/ch03_relatedworks}
+\subfile{chapters/ch04_methodology}
+\subfile{chapters/ch05_experiments}
+\subfile{chapters/ch06_conclusion}
+
+
+%-------------------------------------------------------------------------------
+%	APPENDIX
+%-------------------------------------------------------------------------------
+
+\begin{appendices}
+\subfile{chapters/appendix}
+\end{appendices}
+
+\backmatter
+
+%-------------------------------------------------------------------------------
+%	BIBLIOGRAPHY
+%-------------------------------------------------------------------------------
+% \addcontentsline{toc}{chapter}{References}
+\bibliographystyle{plainnat} 
+% Use the plainnat bibliography style
+\bibliography{bibliography.bib} 
+% Use the bibliography.bib file as the source of references
+
+\end{document}

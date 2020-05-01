@@ -1,0 +1,93 @@
+%!TEX root = ../report.tex
+
+\chapter{Introduction}
+\label{section:introduction}
+Multiphysics is the coexistence of various physical phenomena in a system or process. The systems with multiple physical phenomena are called coupled systems. The study of coupled systems in a simulated environment is called multiphysics simulations. An example of multiphysics simulation is Fluid-Structure Interaction (FSI). For instance, on blowing air at a particular pressure into a balloon, the air exerts a force on the walls of the balloon and inflates the balloon. The process of studying the interaction between the balloon (solid domain) and air (fluid domain) in a simulated environment is called multiphysics simulation.
+
+In this study, Mesh-based parallel Code Coupling Interface (MpCCI), a coupling tool developed by the Fraunhofer Institute for Algorithms and Scientific Computing (SCAI), is used to perform multiphysics simulations \cite{MpCCI_documentation}. In MpCCI, the coupled domains are treated as black-boxes. To perform a multiphysics simulation, the user provides the solid and fluid domain models (fixed parameters) to MpCCI. A few model parameters are solid elasticity, fluid viscosity, Poisson's ratio, fluid density, solid-fluid density ratio, and mesh size depending on the material and design under study. The respective solvers solve the simulation models. Then, the user provides the coupling properties (fixed parameters) depending on the study conditions. The parameters are coupling region, coupled variables, and tolerance of the coupling process. In addition, the user configures the coupling parameters (changeable parameters) such as relaxation scheme, coupling scheme, and various constant values associated with the coupling process. The changeable parameters largely determine the simulation accuracy and time. The changeable parameters are considered to be the hyperparameters of the coupling tool.
+
+Algorithms in various real-time applications expose numerous configurable parameters. A parameter configuration is a vector of acceptable value assignments to all the parameters of an algorithm \cite{Hutterphd}. The parameters are specific to the algorithm and determine the design choices of the user depending on the inputs of the algorithm. The parameters help the user by providing flexibility between cost and performance for a particular instance. In addition, the parameters determine the performance and robustness of the application. This signifies the importance of identifying the optimal parameter configuration. However, manually estimating the optimal parameters by evaluating the algorithm performance for every possible parameter configuration is expensive in terms of resources and time. The challenges of configuring the parameters drive the research field of Automated Algorithm Configuration (AAC) since 1990 \cite{AACfirstwork} \cite{Gratch_1992}.
+
+AAC is a branch of machine learning and optimization theory. It is the method of automatically identifying the optimal values for the parameters of an algorithm. AAC approaches configure the optimal parameters of various applications such as neural networks, robot localization, and constraint satisfaction problems \cite{AAC_Mainreview} \cite{OscarLima_SMAC} \cite{Bharath_SMAC}.
+
+This study focuses on incorporating AAC approaches to develop a robust MpCCI coupling tool by configuring the changeable coupling parameters with optimal values. In addition, the proposed strategy to configure the coupling tool with optimal parameters is developed into a tool called 'smart coupling'.
+
+\section{Motivation}
+
+Most of the Modeling \& Simulation (M\&S) studies for exploring designs and understanding a physical phenomenon to eliminate costly prototypes require robust and accelerated simulation tools. However, a single simulation is associated with a substantial computational time. For instance, a simple crash simulation of an automobile extends up to 48 hours \cite{EGO_Basepaper}. A single simulation instance to study the aerodynamics of aircraft extends up to weeks \cite{aerodynamics_time}.
+
+Multiphysics co-simulation is challenging due to the stability issues, different mesh types, numerous discretization methods, various scales in time, and space \cite{FSI_Bungartz}. The process of setting up a single co-simulation instance incorporates numerous coupling tool parameters to be set by the user (approximately 15 parameters in the MpCCI tool) \cite{MpCCI_documentation}. An inappropriate parameter setting leads to divergence of the solution and the simulation crash after a prolonged run.
+
+In an industrial and research environment, developing efficient designs necessitate the need to perform repeated tests involving various configurations of the coupling tool in a robust environment. Therefore, the considerable computation time of single simulation instance and tedious setting up procedure is challenging in the industrial and research activities.
+
+In addition, the MpCCI tool does not provide any assistance for FSI simulations to meet the demands of the industrial and academic users by providing robust simulation setup. This potentially leads to users configuring the simulation with inappropriate configurations, causing simulation failure.
+
+MpCCI coupling tool is widely used in various research and development laboratories and industries, namely, The European Organization for Nuclear Research (CERN), Switzerland, Cambridge University, United Kingdom, TU München, Germany, Hochschule Bonn-Rhein-Sieg, Germany, Universität Bonn, Germany, Airbus, Eurocopter, Daimler, Volkswagen, Audi, Eaton, and an extended list is available at \cite{MpCCI_documentation_partners}. 
+
+The project aims to improve the robustness of the coupling tool to perform co-simulation studies in a stable and reduced cycle time. The coupling environment is utilized in various fields of research ranging from biomedical to automobile applications. An overview of the use-cases is provided in section \ref{section:use-cases}.
+
+% The approach is generic and can be extended to the various coupling environments like preCICE and ADVENTURE\_Coupler depending on the design criteria.
+
+\section{Problem statement}
+% What is/are the problem(s)?
+The coupling tool exposes numerous parameters for the user to configure.  The parameter configuration of the coupling tool determines simulation accuracy and time. The existing process of manually fine-tuning the coupling tool parameters is a tedious and time-consuming task because of the following reasons:
+ \begin{enumerate}
+\item Numerous configurable parameters in the coupling tool, approximately 20 parameters \cite{MpCCI_documentation}. This complicates the setting up of a single simulation instance in the coupling tool.
+\item Different types of configurable parameters, namely, numerical parameters, categorical parameters, and ordinal parameters. In addition, the parameters exhibit forbidden and conditional dependencies \cite{MpCCI_documentation}.
+\item Numerous categories of multiphysics simulation studies. For instance, FSI, magnetostatics, and heat transfer. This increases the complexity of configuring a co-simulation process for different study types.
+\item An inappropriate configuration might lead to divergence of the simulation and increases the overhead cost of the simulation.
+ \end{enumerate}
+ 
+The research addresses the problem of estimating the optimal parameter configuration of a coupling tool using an automated algorithm configuration approach. The optimal parameter configurations intend to increase the robustness of the simulation in MpCCI by reducing time.
+ 
+\section{Challenges and difficulties}
+% What are the challenges and difficulties in my way?
+The challenges of the project are substantial computational cost associated with single simulation, unavailability of datasets, unavailability of benchmark simulation instances, and unavailability of feature extraction methods.
+
+\begin{enumerate}
+\item Large computational cost: The models of a simulation instance are divided into discrete meshes. Each mesh incorporates iterative methods to solve equations concerning the properties of the simulation problem under study. This iterative solving procedure is expensive, both in terms of time and memory.
+
+%A coarse mesh impacts accuracy. In contrast, a fine mesh increases the computational overhead \cite{mesh_size1} \cite{mesh_size2}.
+
+\item Dataset unavailability: The parameter configurations of a coupling tool govern the accuracy and time taken to perform a multiphysics simulation. However, no preliminary dataset is available to perform an exploratory data analysis and understand the behavior of different parameters. One of the major challenges of the research work is developing a dataset to perform automated algorithm configuration incorporating machine learning models. The machine learning regression models predict optimal parameter configurations with less runtime for a given simulation instance feature. The dataset creation process consumes a large amount of time due to the intricacies of the feature space and computational time associated with a single simulation instance \cite{EGO_Basepaper} \cite{aerodynamics_time}.
+
+\item No benchmark instances: A multiphysics simulation benchmark for parameter configuration should provide information regarding the different MpCCI parameter configurations, types of parameters in MpCCI, domain values of the parameters, the corresponding features of the simulation instances, default values of the simulation instance and the respective performance metrics of a simulation. The performance metrics are simulation runtime or accuracy depending on the simulation problem. The unavailability of MpCCI co-simulation benchmarks for automated parameter configuration makes the comparison of results difficult. The project develops a preliminary benchmark. However, the additional challenges are the lack of expert knowledge and the large time taken to develop a relatively small benchmark set.
+
+\item Feature extraction: The features of a simulation instance are the characteristics of the simulation problem, solver of the simulation instance, coupling scheme, and relaxation methods. There are approximately 100 features. The process of selecting the essential features of a simulation instance is a complex study by experts' opinions. Therefore, this study selects the multiphysics simulation features majorly from FSI literature study \cite{FSI_properties} \cite{FSI_properties2}. 
+
+\end{enumerate}
+
+\section{R\&D statement}
+%  Which specific problem this work is addressing?
+The primary objectives of this research work are:
+\begin{enumerate}
+\item Improve the robustness of the multiphysics simulation coupling tool- MpCCI.
+\item Assist the user by automatically configuring the parameters of MpCCI with optimal values.
+\end{enumerate}
+
+\framebox{
+\parbox[t][3.2cm]{13.58cm}{
+\addvspace{0.2cm}
+\textbf{R\&D statement:} The proposed strategy based on Automated Algorithm Configuration (AAC) procedures effectively configures the parameters of MpCCI coupling tool for Fluid-Structure Interaction (FSI) multiphysics simulations. The suggested configurations perform simulation in a relatively lesser runtime than the default configurations in MpCCI.
+} 
+}\\
+
+The research hypothesis is that an AAC based approach can effectively configure the parameters of the coupling tool. The ultimate goal is to scale the research for the entire multiphysics simulations domain and provide an optimal parameter configuration given an input case from the user. To the best of our knowledge, being the first work to test the hypothesis, the research is focused on testing the applicability of AAC methods to estimate the optimal parameters of FSI multiphysics simulations.
+
+FSI simulations are a complex category of multiphysics simulations \cite{FSI_Bungartz}. In addition, FSI simulations are widely used in various applications ranging from life sciences to the design of microelectronic devices. 
+
+
+% \section{Main contribution}
+% The main contributions of the research work are:
+
+% \begin{enumerate}
+% \item A strategy to automatically configure the hyperparameters of a coupling tool given a simulation instance. The strategy is based on an automated algorithm configuration approach integrating Sequential Model-based Algorithm Configuration (SMAC), a state-of-the-art algorithm configuration approach for per-instance optimization of the simulation instance followed by machine learning models to predict the optimal configuration given a simulation instance.
+% \item A multiphysics simulation dataset for machine learning tasks. The dataset includes the features of the simulation instances, parameters of the coupling tool, runtime of the simulation and status of the simulation (successful or crashed simulation).
+% \item A smart coupling tool to suggest parameter configurations for a given simulation instance depending on the features of the simulation instance.
+% \item A feature reader tool to extract features from the simulation instance given the coupling tool input files.
+% \item The performance of SMAC in optimizing a simulation instance has been analyzed.
+% \end{enumerate}
+
+\section{Report outline}
+
+Chapter \ref{chapter:background} provides an extensive overview of multiphysics simulation, FSI, use-cases of the simulations, algorithm configuration problem, and various metrics used in the study. In addition, the chapter briefly discusses the machine learning models in section \ref{section:machine learning models} and Bayesian Optimization (BO) in section \ref{section:bayesianoptimization}. Chapter \ref{chapter:stateoftheart} provides a broad review of various state-of-the-art AAC methods to solve an Algorithm Configuration Problem (ACP) and provides the reason for choosing Sequential Model-based Algorithm Configuration (SMAC) in this study. The following chapter \ref{chapter:methodology} illustrates the proposed strategy for automatic parameter configuration. It briefly discusses the simulation problem and hyperparameters of the coupling tool in section \ref{section:hyperparameters_couplingtool}. Furthermore, the section \ref{section:smac_smartcoupling_algorithm} provides the smart coupling algorithm developed by extending SMAC for configuring the coupling tool parameters. The experimentation and results (chapter \ref{chapter:experimentation_results}) tests various sub-tasks of the proposed strategy. In addition, the research claim is tested in the final experiment \ref{section:real_eval} followed by a summary. The conclusion portrays the lessons learned and future research directions. Furthermore, the conclusion provides a clear enumeration of all the research contributions of this work. The appendix includes the steps involved in BO, the workflow of SMAC, and the working of the software tools contributed. In addition, features of the various simulation instances are enumerated.   

@@ -1,0 +1,70 @@
+%!TEX root = ../report.tex
+
+\chapter{Conclusions}
+
+Multiphysics co-simulation is widely used in many industrial and academic research and development purposes. MpCCI, developed by Fraunhofer SCAI, aids in co-simulation. The current procedure of setting up a coupling simulation in MpCCI is tedious, with numerous parameters to configure. In addition, the process of tuning the parameters to achieve stable and fast simulation results is highly challenging, given the substantial simulation time and computational cost associated with each simulation. The study focuses on reducing the time taken to perform a coupling simulation. The research work suggests optimal parameter configurations for a user-defined simulation problem. This research work proposes a methodology based on automated algorithm configuration and evaluates the ability of the proposed methodology to configure the coupling tool with the optimal parameters.
+
+A set of simulation instances with varying features are optimized using a model-based optimization procedure, SMAC. The parameter configurations resulting in a successful simulation for a particular simulation instance is utilized for training. This machine learning model is used in real-time to predict optimal configurations given a simulation problem. The optimal configurations signify the ability to perform simulation at a relatively lesser time compared to the current default configuration. The models are evaluated on unseen simulation instances to suggest the best performing models to the user. Random forest and gradient boosting outperform the other machine learning models. 
+
+%  Include percentages and metrics in the above if possible
+
+\section{Contributions}
+
+The contributions of the research work are:
+
+\begin{enumerate}
+
+\item A methodology based on automated algorithm configuration to predict optimal parameter configurations of a coupling tool resulting in robust co-simulation given a simulation problem.
+
+\item \textbf{Multiphysics simulation dataset for ML:} A preliminary Fluid-Structure Interaction (FSI) dataset for machine learning tasks with 1600 observations is developed. The 19 features of the dataset include the solid domain features, fluid domain features, coupling tool parameters, the corresponding runtime, and status of the simulation- successful or crashed.
+
+\item \textbf{Smart coupling tool:} A package including the implementation of the proposed strategy to reduce the coupling tool runtime by suggesting parameter configurations given a simulation problem (refer section \ref{appendix:gitlab_package}).in the dataset generated
+
+\item \textbf{Feature reader:} A package to extract all the possible features of an FSI simulation instance given the coupling tool configuration files and log files. A set of 100 plus features are extracted from the solid and fluid domain solvers (refer section \ref{section:feature_reader}).
+
+\item SMAC performance and repeatability coefficient to optimize multiphysics simulation instances are estimated. 
+
+\item The comparison of machine learning models- KNN, SVM, RF, and GBM to predict the optimal configuration of the coupling tool. The multiphysics simulation data is used for training and validation. In addition, the model performance on unseen simulation instance is evaluated. RF and GBM outperform other models. 
+
+\end{enumerate}
+
+\section{Lessons learned}
+
+The following lessons are learned during the research work.
+
+\begin{enumerate}
+\item The dataset creation is a challenging task because of the substantial simulation time and stability issues in multiphysics simulations. In this work, the dataset is created in 2 steps. Firstly, enumerating the various features of the simulation instance. Then, identifying the parameter configurations and respective cost by running SMAC. The initial plan is to utilize 30 simulation instance and generate 3000 observations of the dataset. However, on continuously kick-starting failed simulations, the final dataset includes only 1600 observations.
+
+\item The second major lesson is data transformation. Logarithmic transformation is a pivotal data pre-processing step for skewed distribution.  This transformation convert the features to log-normal scale. The fat-tail distribution of the cost feature results in relatively large RMSE on the training set. However, the error is reduced drastically by transforming to a log-normal distribution. Therefore, the performing transformation depending on the data distribution aids in improving the learning capability of the model. 
+
+% https://developers.google.com/machine-learning/data-prep/transform/normalization
+
+% \item The hyperparameters of the machine learning model determine the model learning capability and control the model performance. The regressor models illustrate better performance after hyperparameter tuning.
+
+\end{enumerate}
+
+\section{Future work}
+
+Future research and development prospects are enumerated below.
+\begin{enumerate}
+\item Multiphysics simulation includes different types of simulation problems encompassing FSI, magnetostatics, hydrodynamics, chemical reactions, and acoustics in all fields of engineering and scientific research. In this research work, the dataset and feature extraction focus on the FSI transient simulation problems. However, the dataset spanning the entire multiphysics simulation problems should be focussed in the future to scale the suggested AAC approach to the entire co-simulation domain.
+
+\item The current features of the simulation instances are selected based on the properties of an FSI suggested in various research works \cite{FSI_properties} \cite{FSI_properties2} and experts opinion. The simulation instances include various additional features. The exploration of this features of multiphysics simulation is an intricate study.
+
+\item SMAC is the current state-of-the-art automated algorithm configuration approach employing a random forest surrogate model. SMAC is well-suited for this research work because of the numerous categorical parameters in the coupling tool. However, the current prospective researches in the field of automated algorithm configuration investigate the usage of quantile random forests surrogate model. A comparison of SMAC performance with RF and QRF surrogate models is a promising examination.
+
+\item In this research work, SMAC has been incorporated to optimize a particular instance and estimate the optimal parameter configurations treating MpCCI as a black-box. However, the performance of SMAC in finding optimal configurations can be compared against other black-box optimization methods such as Covariance Matrix Adaptation Evolution Strategy (CMA-ES) and algorithm configuration approaches such as Gender-based Genetic Algorithm and ParamILS.
+
+\item The machine learning models are trained using the configurations (refer figure \ref{fig:good-bad-ugly}) resulting in successful simulation from the dataset generated by the per-instance optimization of all the instances. However, the optimal count of good configurations for training the models is a possible future work because taking all the good and ugly configurations have the possibility to bias the model.
+
+\item The current smart coupling tool is available as a python package \ref{appendix:gitlab_package}. In the future, the package should be integrated into the MpCCI software after enriching the machine learning with an enriched dataset covering other coupling simulation problems.
+
+\item The performance of various algorithm configuration approaches are evaluated experimentally against standard benchmarks in problems such as mixed-integer programming and boolean satisfiability problems \cite{Hutterphd}. In contrast, being a new application domain, no standard benchmarks are available. One of the future prospects can focus on developing benchmarks for testing the algorithm configuration performance on multiphysics simulations.
+
+% Benchmark contains #instances, parameter configurations, type, and best available cost.
+% AC for deterministic algorithms, and a single instance is deterministic BBO.
+% Algo configuration, the parameters are mostly a configuration space and mostly discrete. Will not be config space = R^d.
+% Cost in AC is cost(seed, parameter configuration and instance).
+% Ac includes cut off time k for evaluating each instance that is unsuccessful, but successful ones get over soon. However, BBO, the target algorithm optimization, takes place at the same amount of time. (ASK Mohan)
+\end{enumerate}
+

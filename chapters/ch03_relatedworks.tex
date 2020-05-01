@@ -1,0 +1,159 @@
+%!TEX root = ../report.tex
+
+\chapter{Related work}
+\label{chapter:stateoftheart}
+
+The pivotal part of an algorithm configuration task is optimization. The major classes of optimization algorithm based on the procedure of solving the optimization tasks are stochastic optimization and deterministic optimization. Stochastic optimization includes a set of algorithms performing maximization or minimization of an objective function with randomness. It is also called as optimization under uncertainty. The objective function or the constraints in the optimization problem are the sources of randomness. The various stochastic optimization methods include random search, simulated annealing, hill climbing, evolutionary computing and genetic algorithm based methods \cite{Spall_2003}.
+
+Deterministic optimization methods utilize direct mathematical approaches on the analytical formulation of the problems to solve the optimization task. A few examples are mixed-integer programming, non-linear and linear programming \cite{Deterministic_optimization_Review} \cite{Deterministic_optimization}.
+
+The problem of algorithm configuration can be viewed as a stochastic optimization task. The stochastic optimization methods \cite{Spall_2003} need the gradient explicitly. However, the few algorithms that estimate the gradient information using certain evaluation functions converge at local extremes only. In addition, most of the methods significantly focus on numerical parameters. This restricts the direct application of stochastic optimization algorithms for Automated Algorithm Configuration (AAC) problems \cite{AAC_Mainreview}.
+
+The various methods for automated algorithm configuration discussed in the literature are based on local search, experimental design, genetic algorithm, racing, numerical optimization and Sequential Model-Based Optimization (SMBO).
+
+% Local search:
+% The underlying search strategy commences with a random state for a given instance and the solution is improved by modification. The process is continued until a time budget is met or an optimal solution is estimated.
+% Example:
+% Hill-climbing: Start with a random state and find neighbors of the state by modifications. Then, move to a neighbor with high value. If the neighbors are of same value, then do random selection. Used for minimization and maximization.Refer Russel Norvig, AI lecture slides. Can stuck in local optima, plateaus and ridges.
+
+% Racing procedure: 
+% Used for machine learning model selection. Evaluates a set of models in parallel on a set of examples and quickly discards the models that are worst performing. The models with worst generalization so far is eliminated by looking at the running average of the errors so far. The computational effort is focused in differentiating models performing good. Similarly for selecting between a set of configurations.
+
+% Experimental design
+
+\section{Model-free algorithm configuration methods}
+\label{section:model-free}
+
+This segment gives a brief report of various model-free algorithm configuration approaches. The model-free algorithms are comparatively simple. The methods employ local search strategies, racing algorithms or experimental design procedures to configure the target algorithm.
+
+\subsection{Local search}
+
+Local search methods are useful to solve optimization problems. The search initiates from a random candidate solution in the solution space of the problem. A cost function guides the search strategy by evaluating the performance of different candidate solutions. The search is governed by generating candidate solutions. The candidates are neighbors obtained by applying local changes to single value of the current candidate solution. A candidate solution is a state with complete assignment of the configurations called complete-state formulation \cite{Russell_Norvig}. The search terminates with the successive neighbors resulting in the same cost metric or zero cost. The former requires restarting the algorithm with a random state and the latter is the global minimum \cite{Localsearch_constraintbook}. A few members of the local search family include hill climbing, simulated annealing, local beam search and genetic algorithm \cite{Russell_Norvig}. The applications of the local search approaches include Constraint Satisfaction Problems (CSP), planning and scheduling systems, Travelling Salesman Problem and Vehicle Routing Problem (VRP), heuristic procedures, time-table scheduling and SAT solver configuration.
+
+\subsubsection{Hill climbing}
+
+The neighbors pertaining to the current candidate solutions are generated and the neighbor with the best cost metric is selected to be the next state. The algorithm is similar to moving uphill or downhill depending on the optimization problem at hand \cite{Russell_Norvig}. The research work by Gratch, et al., \cite{Gratch_1992} in 1992, offers a probabilistic solution to overcome the utility problem in planning systems and enhance the speed of learning. In this scenario, the performance of planning systems is affected by the knowledge learned by the systems. The paper focus on adaptive problem solving and utilizes hill-climbing to search for along the configuration space. The statistical significance is used compare between different configurations. In 1996, Composer system has been used in scheduling the communication. Composer has significantly improved 5 parameters of the scheduling algorithm and aided in the communication between spacecrafts and antennas \cite{Gratch_1996}.
+
+The drawbacks of the system are primarily due to the drawbacks of hill-climbing search. The search algorithm often fails to proceed further at the local extremes, ridges and plateaus \cite{Russell_Norvig}. In addition, the study has been restricted to only 5 parameters of an algorithm. 
+
+\subsubsection{Beam search}
+
+The beam search is a local search method working by promising node exploration. Initially, the search strategy commences with a set of promising 'n' candidates. Following, beam search generates all the successor candidates and utilize a heuristic to select only the 'n' best successors. The value 'n' is called beam width. The algorithm returns the best candidate until a defined search budget or finding a goal \cite{Russell_Norvig}.
+
+An analytic learning system by Steven Minton focus in 1993 \cite{Minton_1993} for specializing heuristics concentrates on the Multi-Tactic Analytic Compiler (MULTI-TAC) systems. The MULTI-TAC systems aid solving constraint satisfaction problems by an analytical approach. The inputs are the generic heuristics concerning the problem, problem domain, and the distribution of the various instances. The system develops various LISP programs corresponding to a particular domain and heuristics. The sampled problem instances are used to evaluate the LISP programs and the best program is selected by performing beam search. 
+
+The disadvantages of the system are similar to the challenges of beam search. The beam search is non-optimal and incomplete because of the possibility of pruning a goal state or the best configuration \cite{Beamsearch_disadv}. The beam search is affected by diversity limitation among the 'n' states resulting a restricted exploration of the solution space. In addition, to overcome the local optima, beam search is restarted with 'n' random states \cite{Russell_Norvig}.
+
+\subsubsection{Experimental design with local search}
+
+Experimental design incorporates the process of closely planning the experiment. This includes data collection and analyse the data to draw conclusion. The two steps of experimental design are design of experiment and statistical analysis. The structure of the experiment corresponds to the experimental design. In this study, factorial design is used to design the experiment. The parameter configurations of the problem is analyzed to formulate the possible levels of the parameters. A factorial design performs $2^l$ or $3^l$ experiments on the problem. $l$ is the number of parameters. The base, 2 and 3, is the respective number of choices for a parameter. A fractional factorial design provides a reduction in the total experiment count given by $2^{l-p}$ or $3^{l-p}$, where $p$ is the reduction factor. The experiments evaluate all the possible critical factors on the target algorithm. The search strategy is guided by the experimental results. The major disadvantage is the total number of experiments and parameters are exponentially related. This practically restricts the process of configuring target algorithms with numerous parameters \cite{Adenso-Diaz_2006}.
+
+The study \cite{Coy_2001} by Steven P. Coy, et al.,  proposes a method to effectively estimate the parameter settings of different heuristics.  The research employs gradient descent and statistical experimental design procedures. The procedure requires a predesigned training instance set. The algorithm estimates the optimal parameter configuration using gradient descent and experimental design for each training instance. The experimental design employs two design strategies, namely, fractional factorial and full factorial design strategies. The parameter configuration of all the instances are averaged to estimate the optimal parameter values. The method is restricted to only numerical parameters because of the final averaging step to estimate the optimal parameter values.
+
+% Statistical experimental design: how participants are allocated to the different conditions (or IV levels) in an experiment.
+% Select a group of training instance by experts to statistically cover all cases. Determine the parameters of the instance, range of each parameter values and generate 2^k configurations, where k is the number of parameter for full factorial and build 2^(k-p) for partial factorial design, where p is the partial design choice for the group. For each training instance, find optimal parameters from the training instances by gradient descent with parameter values as chosen by the experimental design. Finally best configuration for the entire problem is only one by average.
+%  No use of the information of each instance evaluated just using the average. So application is restricted depending on the statistical group only.
+% For Experimental design with search strategy refer below paper.
+% https://pdfs.semanticscholar.org/d2d9/b1bf324a124d27bfa2cc79be039d26e926b9.pdf ==> for STATISTICAL DESIGN OF EXPERIMENTS: Page 2:DOE
+
+CALIBRA finds the best search parameter for a heuristic procedure. The study is similar to \cite{Coy_2001} utilizing full factorial design procedure with response surface. However, the follow up research work on CALIBRA, \cite{Adenso-Diaz_2006} is comparatively effective. The work by Adenso-Diaz, et al., \cite{Adenso-Diaz_2006} is a combination of local search and full factorial design is employed in the study. The procedure utilizes two values of a parameter for evaluating each configurations. This iterative process estimates the optimal parameter configuration space by testing nine configurations surrounding the good parameter configuration space. The experimental design grid is modified until local optimum is estimated. CALIBRA outperforms the existing configuration for six target algorithms. CALIBRA is applicable to only ordinal and numerical parameters. In addition, the procedure is restricted to estimate only five parameters at maximum.
+
+\subsubsection{Genetic Algorithm (GA)}
+
+Genetic Algorithm is a variant of stochastic beam search incorporating natural selection and genetics. The stochastic beam search selects the 'n' random successors with a probability assigned to each successors. The associated probability value depends on the cost value with the successors. In genetic algorithm, a random population is sampled from the solution space. The offspring (successors) are generated by applying a genetic operator to the population. The genetic operators are crossover and mutation performing a combination of the parents followed by alteration to provide an offspring. The offspring candidates are assigned with a fitness value. The next population set is selected to produce offsprings depending on the fitness value of the candidates \cite{Russell_Norvig}.
+
+The initial works on incorporating evolutionary algorithm for solving algorithm configuration problems apply Genetic Algorithm concepts to time-tabling challenges by using an indirect chromosome encoding methodology \cite{GA_Terashima_1999}. This method overcomes the limitations posed by direct encoding and solves problems in various related domains such as neural networks, manufacturing and scheduling. The research work optimizes the scheduling problem for 12 instances using a modified Brelaz algorithm. A total of seven categorical parameters has been configured. However, the optimization is carried out individually for each instance. In addition, the time taken for optimization is not quantified and still under research. The time taken to estimate the solution is under exploration \cite{AAC_Mainreview} and evaluation of fitness function for each candidate solution is expensive. The methodology is restricted to single instance optimization. The stochastic nature of selection restricts the optimality condition and completeness of the search \cite{Russell_Norvig}. In addition, the parameters such as population size, fitness function, mutation rate, cross over and offspring selection method are critical. The assignment of inappropriate values result in extremely unfavourable outcome \cite{GA_disadv1} \cite{GA_disadv2}.
+
+Gender based Genetic Algorithm (GGA) configuration is an evolutionary algorithm based algorithm configuration method. GGA is widely used in parameter tuning of various SAT solvers \cite{GGA_application1}, mixed integer programming \cite{GGA_application1} and machine reassignment \cite{GGA_application2}. In GGA, the population is divided into two types non-competitive and competitive. The former aids in diversifying the candidates and later population is tested on the target algorithm directly. This is followed by a tournament based selection procedure and a strong intensification procedure. The comparative studies on GGA and FocusedILS, a variant of ParamILS proves GGA is less effective than FocusedILS \cite{SMAC_extendedpaper}. GGA has been extended with response surface methods for choosing offsprings effectively and faster in GGA++\cite{Modelbased_GGA}. 
+
+\subsection{Racing algorithm}
+
+Algorithm configuration problems have been solved by incorporating the racing algorithms in machine learning. One of the racing procedures is F-Race \cite{FRace_paper} and successfully aids in configuring stochastic local search algorithms. The target algorithm $\mathcal{A}$, instance distribution D and finite set of configurations are the inputs of the algorithm. The parameter configurations are sampled from a distribution of the parameters. The configurations are evaluated repeatedly on samples drawn from the instance distribution until only one parameter configuration is available or terminates at the completion of user specified time budget. The configurations performing significantly lesser than a particular configuration are eliminated using Friedman or paired t-test. 
+
+A promising variant of F-Race is Iterative F-Race (I/F-Race). In I/F-Race, the configurations are chosen from a probabilistic model followed by the conventional F-Race \cite{IFRace_paper}. The probabilistic model is biased to sample towards good configurations on collecting new evidence.
+
+F-Race evaluates the possible configurations at the beginning of the procedure. Therefore, F-Race is restricted to applications possible of enumerating all the candidate configuration. The procedure is restricted to numerical parameters and certain variants are available to accommodate categorical parameters. However, the effectiveness of the algorithm in handling numerous categorical and conditional parameters at complex algorithm applications as discussed in \cite{SAT_examplepaper} \cite{FRace_limitation2} \cite{FRace_limitation3} \cite{FRace_limitation4} is unexplored. The applications of racing methods in algorithm configuration include combinatorial optimization, and mixed integer programming.
+
+\subsection{ParamILS}
+
+The paper discusses a new AAC framework by Frank Hutter, Holger H. Hoos, et al., \cite{ParamILS_mainpaper} called ParamILS. One of the major contributions of this iterated local search procedure is adaptive capping. It provides cutoff time for the evaluation of each configuration. This improve the time efficiency of the algorithm.
+
+Being a model-free procedure, ParamILS selects the initial configuration by combining random and default parameter values with fixed number of perturbation moves. The methodology accepts equally performing configurations or better configurations and restarts at a random values. The procedure can alter only one parameter value at each target algorithm evaluation. BasicILS and FocusedILS are the two instantiations of ParamILS incorporated in the framework \cite{ParamILS_mainpaper}.
+
+ParamILS supports discrete parameters only. However, the parameters in most of the problems are continuous. The discretisation of continuous parameters and dynamically extending the domains of the parameters is a challenging task. In addition, ParamILS is restricted to single instance optimization. The applications of ParamILS in algorithm configuration include mixed integer programming, time-tabling, and protein folding \cite{ParamILS_mainpaper}.
+
+\section{Model-based algorithm configuration methods}
+\label{section:model-based}
+
+The direct search, model-free methods does not take advantage of each evaluations of the target algorithm by explicitly modeling the configuration space. However, model-based methods capture the regularities in the configuration space over time. The model-based methods consistently fits a model to the target algorithm responses over the parameters. In addition, it utilizes the model to select the configurations for evaluating the target algorithm. The model aids in interpolating and extrapolating the target algorithm performance between the observed and unseen parameter settings respectively. This regression model is called response surface model \cite{AAC_Mainreview}. In addition, the model quantifies the parameter interaction and significance of each parameter. Therefore, the model guides the search towards efficient parameter configurations.
+
+\subsection{Sequential Model-based Optimization (SMBO)}
+
+A special type of black-box optimization task can be visualized to be an Algorithm Configuration Problem (ACP). Algorithm configuration carried out for a single instance of a deterministic algorithm is called deterministic Black-Box Optimization (BBO) \cite{Hutterphd}. In contrast, parameter configurations in a distribution of infinite configurations is stochastic BBO \cite{Hutterphd}. ACP is mostly a discrete problem because the parameter configurations of target algorithms are rarely continuous. The cost metric in ACP is a mixture of the parameter configuration, seed for instance selection and instances. However, in BBO the cost distribution is a function of the parameter configuration of a single instance of the problem. The algorithm configuration runtime of each instance is different depending on the parameter configuration. In addition, ACP employs a cut-off time for each instance to terminate an instance running for a long time. In contrast, BBO assumes a fixed time for evaluation of each problem \cite{Hutterphd}. 
+
+SMBO is developed for BBO. However, SMBO has been extended with certain modifications to perform algorithm configuration. SMBO refers to all the common approaches utilizing a stochastic or noise-free Gaussian Process (GP) regression model assuming noisy or noise-free responses for the parameters from the target algorithm. Design and Analysis of Computer Experiments (DACE) is the GP noise-free model constructed using the empirical cost response of the configurations evaluated \cite{Hutterphd}. The next promising configuration is given by the model. This configuration is evaluated on the target algorithm. The next query point depends on the model distribution and the expectation of the positive improvement of a particular configuration with regard to the present best configuration. This criterion is called expected improvement (EI). The algorithm combining DACE and EI is called Efficient Global Optimization (EGO) \cite{AAC_Mainreview}.
+
+The applications of SMBO include configuring evolutionary algorithms, SAT solvers, mixed integer programming, timetable scheduling, and hyperparameter optimization.
+
+\subsubsection{Sequential Parameter Optimization (SPO)}
+Cannot handle complex conditional parameters.
+SPO is a framework providing fully automated and interactive procedures to understand and optimize a parameter setting problem. In addition, the Sequential Parameter Optimization Toolbox (SPOT) incorporates fully automated SMBO. SPO is a model-based BBO technique based on DACE \cite{Bartz_2006}. The different configurations for estimating the best configuration for a target algorithm is selected from a Latin Hypercube Design (LHD). The hypercube is obtained from several training instances. The cost metric is estimated for every single assessment of the target algorithm over the different configurations. SPO develops a regression model based on noise-free GP. The next configuration is chosen based on the model predictions and uncertainties of the predictions. SPO utilize the metric expected improvement to determine the next configuration. The response surface model is constructed after each evaluation of the target algorithm.
+
+SPO+ \cite{SPOplus_2009}, a more robust version of SPO performs better on standard benchmarks. The process of accepting the incumbent serves as the primary difference between both methods. The Time-Bounded Sequential Parameter Optimization (TB-SPO) is another variant of SPO with changes in the initial model construction procedure \cite{TBSPO_2010}.
+
+The time complexity of SPO is $O(n^3)$ with cubic run-time on the number of unique response values. It impose a large computational overhead. The algorithm configuration is limited to continuous parameters and single instance optimization. 
+
+\subsubsection{Sequential Kriging Optimization (SKO)}
+
+A variant of EGO method. The noisy measurements from the target algorithm evaluations is modelled directly using a GP model. Similar to SPO, a LHD is utilized to sample the parameters for evaluation. The next query point is obtained by minimizing mean and variance expression of the GP model by Nelder-Mead Simplex algorithm. The time complexity is computationally expensive ranging to cubic with respect to the response value count for each iteration. It is applicable for continuous and single instance. SKO does not terminate poorly performing configurations and supports only numerical parameters.
+
+\subsection{Sequential Model-based Algorithm Configuration (SMAC)}
+
+SMAC is a model-based algorithm configuration framework primarily based on Bayesian Optimization (BO) by Frank Hutter, et al., \cite{SMAC_mainpaper}. SMAC is the current state-of-the-art framework for AAC. It incorporates racing mechanisms and a RF surrogate model to chose between the configurations for next evaluation. The availability of random forests surrogate model aids SMAC to effectively handle conditional and categorical parameters. A detailed explanation about the SMAC framework will be discussed in Chapter \ref{section:smac}.  
+
+The use of random forests surrogate model results in a non-differentiable and discontinuous response surface for optimization. This necessitates the need for local and random search for optimizing the acquisition function. In addition, the prediction uncertainty is provided by the empirical variance of the ensemble tree predictions \cite{Bayesianoptimization_review}. The applications of SMAC includes hyperparameter optimization, and algorithm configuration of mixed integer programming and boolean satisfiability problems.
+
+\subsection{Gender-based Genetic Algorithm++ (GGA++)}
+
+In 2015, the idea of combining the effectiveness of model-based techniques with model-free genetic algorithm framework is explored. GGA++ method significantly \cite{Modelbased_GGA} improves the effectiveness of genetic algorithms based algorithm configurators. GGA++ employ a surrogate model incorporating genetic engineering and sexual selection. The offspring for evaluation is identified on comparing different surrogate models. A random forest surrogate model performs better for genetic algorithm based methods. It aids in identifying better configurations at a relatively faster and effective manner \cite{RF_for_IF} \cite{Modelbased_GGA}.
+
+\section{Summary}
+
+The algorithm configuration approaches majorly fall into two paradigms- model-based and model-free. The major disadvantages of the model-free methods is the requirement of numerous target algorithm evaluations and provision for only single instance optimization. In addition, the advantages of the model-based approaches are enumerated below.
+\begin{enumerate}
+\item Only promising parameter configurations based on the prior knowledge are evaluated on the target algorithm. 
+\item Multi-instance optimization is possible with the inclusion of instance features in model construction.
+\item Extrapolate and interpolate the performance between the unseen and evaluated configurations respectively \cite{Hutterphd}.
+\item Predict the performance of the configurations on different instances of the problem \cite{Hutterphd}.
+\item Performs relatively lesser evaluations of the target algorithm \cite{Hutterphd}.
+\item Provides a quantification of the parameter importance and interaction \cite{Hutterphd}.
+\item Provides a quantification of the parameter configuration and instance features interaction \cite{Hutterphd}.
+\end{enumerate}
+
+The disadvantages of model-based approaches are the performance is dependent on the surrograte model hyperparameter setting and complex development cycle \cite{Hutterphd}. The following table \ref{table:comparison_relatedworks} provides a comparison of the limitations of various state-of-the-art algorithms. One of the state-of-the-art algorithms ParamILS \cite{ParamILS_mainpaper} handles numerical discrete parameters effectively and requires discretization of the continuous parameters.  The results largely depend on the effectiveness of generating discrete parameters. Similarly, GGA++ struggles to manage complex conditional parameters.
+
+\begin{table}[]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Method} & \textbf{\begin{tabular}[c]{@{}l@{}}Model\\ paradigm\end{tabular}} & \textbf{Limitations} \\ \hline
+Hill-climbing \cite{Gratch_1992} & \begin{tabular}[c]{@{}l@{}}Model-\\ free\end{tabular} & \begin{tabular}[c]{@{}l@{}}a. Restricted to configure 5 parameters.\\ b. Search is stuck at local optima, saddle point \\and plateaus.\end{tabular} \\ \hline
+\begin{tabular}[c]{@{}l@{}}Local \\ beam search \cite{Minton_1993}\end{tabular} & \begin{tabular}[c]{@{}l@{}}Model-\\ free\end{tabular} & \begin{tabular}[c]{@{}l@{}}a. Non-optimal search method.\\ b. Incomplete search.\end{tabular} \\ \hline
+\begin{tabular}[c]{@{}l@{}}Experimental design\\ with gradient descent\\  \cite{Coy_2001}\end{tabular} & \begin{tabular}[c]{@{}l@{}}Model-\\ free\end{tabular} & \begin{tabular}[c]{@{}l@{}}a. Applicable to only numerical parameters. \\ b. Slow convergence.\\ c. Expensive to estimate the gradient.\end{tabular} \\ \hline
+\begin{tabular}[c]{@{}l@{}}Experimental design\\ with local search\\  \cite{Adenso-Diaz_2006}\end{tabular} & \begin{tabular}[c]{@{}l@{}}Model-\\ free\end{tabular} & \begin{tabular}[c]{@{}l@{}}a. Supports only 5 parameters.\\ b. Restricted to ordinal and numerical parameters.\end{tabular} \\ \hline
+GA \cite{GA_Terashima_1999} & \begin{tabular}[c]{@{}l@{}}Model-\\ free\end{tabular} & \begin{tabular}[c]{@{}l@{}}a. Numerous evaluations of target algorithm.\\ b. Only single instance optimization.\\ c. Additional effort for fitness function evaluation.\end{tabular} \\ \hline
+GGA \cite{GGA_paper}& \begin{tabular}[c]{@{}l@{}}Model-\\ free\end{tabular} & \begin{tabular}[c]{@{}l@{}}a. Less efficient compared to local search variants.\\ b. Cannot handle complex conditional parameters.\\ c. Additional effort for fitness function evaluation.\end{tabular} \\ \hline
+\begin{tabular}[c]{@{}l@{}}F-Race \cite{FRace_paper} \\and IF-Race \cite{IFRace_paper}\end{tabular}  & \begin{tabular}[c]{@{}l@{}}Model-\\ free\end{tabular} & \begin{tabular}[c]{@{}l@{}}a. Numerous evaluations of target algorithm.\\ b. Cannot handle complex conditional parameters.\end{tabular} \\ \hline
+ParamILS \cite{ParamILS_mainpaper} & \begin{tabular}[c]{@{}l@{}}Model-\\ free\end{tabular} & \begin{tabular}[c]{@{}l@{}}a. Supports only discrete parameters.\\ b. Requires additional discretization.\end{tabular} \\ \hline
+SPO and SKO \cite{Hutterphd} & \begin{tabular}[c]{@{}l@{}}Model-\\ based\end{tabular} & \begin{tabular}[c]{@{}l@{}}a. Time complexity is high.\\ b. Only for numerical parameters.\\ c. Cannot terminate poor runs.\\ d. Only single instance optimization.\end{tabular} \\ \hline
+GGA++ \cite{Modelbased_GGA}& \begin{tabular}[c]{@{}l@{}}Model-\\ based\end{tabular} & \begin{tabular}[c]{@{}l@{}}a. Cannot handle complex conditional parameters.\\b. Additional effort for fitness function evaluation.\\ c. Only single instance optimization.\end{tabular} \\ \hline
+SMAC \cite{SMAC_mainpaper} & \begin{tabular}[c]{@{}l@{}}Model-\\ based\end{tabular} & \begin{tabular}[c]{@{}l@{}}a. RF does not explore the search space completely \\ for 1D optimization problem \cite{Hutterphd}.\end{tabular} \\ \hline
+\end{tabular}
+\captionsetup{justification=justified}
+\caption[Limitations of related work]{Limitations of related work.}
+\label{table:comparison_relatedworks}
+\end{table}
+
+SMAC outperforms other algorithm configuration procedures in configuration scenarios with categorical inputs. The reason is the ability of random forest to efficiently handle categorical inputs relative to other surrogate models- GP, Tree Parzen Estimator, etc., \cite{Hutterphd}. In addition, the decision tree based surrogate model is effective in handling conditional parameters of the problem constructing more precise model specific to the problem. A comparison between GGA, ParamILS and SMAC for configuring a complex SAT solver illustrates the effectiveness of SMAC in algorithm configuration \cite{SMAC_ParamILS_GGA_compare}. In this research work, there are 6 categorical and 7 conditional parameters. The need to automatically configure the categorical and conditional parameters is the prime reason for selecting SMAC. This research work focuses on implementing SMAC for the task of smart coupling in multiphysics simulations.
+
+

@@ -1,0 +1,308 @@
+\documentclass[20pt, 
+               a4paper, 
+               portraitmargin = 0mm, 
+               margin = 0mm,
+               innermargin = 50mm,
+               blockverticalspace = 10mm,
+               colspace = 40mm,
+               subcolspace = 8mm]
+               {tikzposter}
+
+
+
+%%%%% packages %%%%%
+\usepackage[utf8]{inputenc}
+\usepackage{wrapfig}
+\usepackage{enumitem}
+\usepackage{graphicx}
+
+\usetikzlibrary{positioning,calc}
+% \usepackage[linesnumbered]{algorithm2e}
+\usepackage[ruled,vlined]{algorithm2e}
+\AtBeginEnvironment{algorithm}{%
+  \setlength{\columnwidth}{\linewidth}%
+}
+%itemize
+\setitemize{labelindent=1.5em,labelsep=1em,leftmargin=*}
+\setenumerate{labelindent=1.5em,labelsep=1em,leftmargin=*}
+
+
+%%%%% remove inner sep within fbox
+\setlength{\fboxsep}{0pt}%
+\setlength{\fboxrule}{1pt}%
+
+%%%%% Remove “LaTeX Tikzposter” in bottom right corner
+\tikzposterlatexaffectionproofoff
+
+%%%%% Font family
+\renewcommand{\familydefault}{\sfdefault}
+
+
+%%%%% layout %%%%%
+\definecolor{b-it_blue}{HTML}{016ABA}
+\definecolor{b-it-bots_blue}{HTML}{0071BD}
+\definecolor{brsu_blue}{HTML}{0BA1E2}
+\definecolor{mas-group_dark-blue}{HTML}{0072bb}
+\definecolor{mas-group_light-blue}{HTML}{2889c7}
+\definecolor{mas-group_cyan}{HTML}{42a3e1}
+\definecolor{mas-group_light-gray}{HTML}{dcdcdc}
+\definecolor{mas-group_dark-gray}{HTML}{8c8c8c}
+
+
+% color scheme
+\usetheme{Simple}
+\definecolorstyle{BrsuColorStyle}
+{
+	\definecolor{colorOne}{named}{white}
+	\definecolor{colorTwo}{named}{black}
+	\definecolor{colorThree}{named}{b-it_blue}
+}
+{
+	\colorlet{backgroundcolor}{colorOne}
+	\colorlet{framecolor}{colorOne}	
+	\colorlet{titlefgcolor}{colorThree}
+	\colorlet{titlebgcolor}{colorOne}
+	\colorlet{blocktitlebgcolor}{colorOne}
+	\colorlet{blocktitlefgcolor}{brsu_blue}
+	\colorlet{blockbodybgcolor}{colorOne}
+	\colorlet{blockbodyfgcolor}{colorTwo}
+}
+\usecolorstyle{BrsuColorStyle}
+
+
+% blocks
+\defineblockstyle{BrsuBlockStyle}
+{
+	titlewidthscale=1.0, 
+	bodywidthscale=1.0,
+	titleleft,
+	titleoffsetx=-5mm,
+	titleoffsety=0mm,
+	bodyoffsetx=0mm,
+	bodyoffsety=0mm,
+	bodyverticalshift=8mm,
+	roundedcorners=0,
+	linewidth=0pt,
+	titleinnersep=5mm,
+	bodyinnersep=0mm
+}{
+	\draw[color=framecolor, fill=blockbodybgcolor, rounded corners=\blockroundedcorners] (blockbody.south west) rectangle (blockbody.north east);
+	\ifBlockHasTitle
+		\draw[color=framecolor, fill=blocktitlebgcolor, rounded corners=\blockroundedcorners] (blocktitle.south west) rectangle (blocktitle.north east);
+		\draw [dash pattern=on 5pt off 10pt, color=brsu_blue, line width = 2mm] (blockbody.north west) -- (blockbody.north east);	
+	\fi
+}
+\useblockstyle{BrsuBlockStyle}
+
+
+%%%%% title %%%%%
+\title{\parbox{0.85\linewidth}{\LARGE Algorithm Configuration for Smart Coupling in Multiphysics Simulations}}
+\author{\parbox{0.85\linewidth}{\large Hamid Arjmandi and Deepan Chakravarthi Padmanabhan}}
+\institute{Fraunhofer Institute for Algorithms and Scientific Computing (SCAI)}
+\date{\today}
+
+% format title
+\definetitlestyle{BrsuTitle}{linewidth = 0mm,
+							innersep = 0pt,
+							titletotopverticalspace = 2.5cm,
+							titletoblockverticalspace = 0cm
+}{
+	\begin{scope}[line width=0pt]
+		\draw[color=blocktitlebgcolor, fill=titlebgcolor]
+		(\titleposleft,\titleposbottom) rectangle (\titleposright,\titlepostop);
+	\end{scope}
+}
+\usetitlestyle{BrsuTitle}
+
+\settitle
+{
+	\vbox
+	{
+		\color{titlefgcolor} {\bfseries \Huge \sc \textbf{\@title} \par}
+		\vspace*{1em}
+		{\LARGE \@author \par}
+		\vspace*{1em} 
+		{\large \textit{\@institute}}
+	}
+}
+
+
+\begin{document}
+
+\maketitle[width=0.88\textwidth]
+
+
+%%%% LAYOUT BLOCK
+\block{}
+{
+\begin{tikzpicture}[remember picture,overlay]
+\pgfmathsetmacro\barwidth{2.86}
+\pgfmathsetmacro\topbarlength{13}
+
+
+% left side
+\node at (current page.north west) {\draw [fill=b-it_blue, draw=b-it_blue] (-0.14,0) rectangle (\barwidth, -\topbarlength);};
+\node at (current page.north west) {\draw [fill=brsu_blue, draw=brsu_blue] (-0.14,-14) rectangle (\barwidth,-110);};  \node at (current page.south west) {\draw [fill=mas-group_dark-gray, draw=mas-group_dark-gray] (-0.14, 8) rectangle (\barwidth, 0);};
+    
+% top right
+% \node at (current page.north east) {\draw [fill=b-it_blue, b-it_blue] (-0.36,0) rectangle (-3.36,-\topbarlength);};
+% \node at (current page.north east) {\draw [fill=brsu_blue, brsu_blue] (-4.36,0) rectangle (-7.36,-\topbarlength / 4 * 3);};
+% \node at (current page.north east) {\draw [fill=mas-group_dark-gray, mas-group_dark-gray] (-8.36,0) rectangle (-11.36,-\topbarlength / 4 * 2);};
+% \node [shift={(-24,-6.2)}] at (current page.north east) {\includegraphics[height=4cm]{gfx/fraunhofer-logo.png}};
+\node [shift={(-11,-6.5)}] at (current page.north east) {\includegraphics[height=4cm]{gfx/fraunhofer-logo.png}};
+\end{tikzpicture}
+}
+-24,-6.2
+
+\begin{columns}
+%%%%% LEFT COLUMN %%%%%%%%%%%%%%%%%%%%%%
+    \column{0.5}
+    \block{Objective}
+    {
+    The primary objectives of this research work are:
+    \begin{itemize}
+        \item Improve the robustness and acceleration of the multiphysics coupling tool- Mesh-based parallel Code Coupling Interface (MpCCI).
+        \item Assist the user by automatically configuring the parameters of MpCCI.
+        
+    \end{itemize}
+    }
+    \block{Introduction}	
+    {
+    Multiphysics simulation is the process of simulating the interaction of various physical phenomena involving multiple physical domains. Multiphysics simulations are widely used in biomedical, automobile, mechanical and electrical industry to study the physical behavior of a system. An example of multiphysics simulation is Fluid-Structure Interaction (FSI). In FSI a deformable solid structure interacts with 
+    a compressible or incompressible fluid flow, where pressure and displacement are the coupled quantities. In this study, MpCCI, a coupling tool, is used to perform multiphysics simulations through the partitioned coupling as shown in Figure~\ref{fig:couplingScheme}. In MpCCI software, the coupled domains are treated as black-boxes \cite{MpCCI_documentation}.
+    
+    \begin{tikzfigure}
+			\includegraphics[width=1\linewidth,height=0.9\linewidth]{gfx/Terminology-withMpCCI.pdf}
+			\label{fig:couplingScheme}
+			\caption{Figure~\ref{fig:couplingScheme}: Illustration of the coupling mechanism}
+	\end{tikzfigure}
+%   Multiphysics simulation in MpCCI
+    % For each simulation, there are parameters with fixed values namely the solid and fluid domain models, and configurable coupling property values controlling the simulation robustness. Currently, both types of parameters should be set by the user. In this study, Automated Algorithm Configuration (AAC) is used to identify the optimal values for the changeable parameters of MpCCI automatically, in order to to achieve a robust, fast and accurate simulation.
+    
+    To perform a multiphysics simulation, the user provides the solid and fluid domain models (fixed parameters) to MpCCI. The models are solved by the respective solvers. Then, the user provides the coupling properties (fixed parameters) inputs depending on study conditions. In addition, the user configures the coupling parameters (changeable parameters) such as relaxation scheme, number of processors, coupling scheme, etc., This study focuses on applying Automated Algorithm Configuration (AAC) to develop a robust, fast and accurate multiphysics coupling tool by configuring the changeable coupling parameters with optimal values.
+    }
+    		
+    \block{Problem Statement}
+	{
+	\begin{itemize}[noitemsep,topsep=0pt]
+	    \item In the coupling tool, the user tunes the coupling parameters to couple the solvers. This configuration governs the robustness and time to perform the simulation.
+	    \item The determination of the optimal configuration for coupling is model specific. An inappropriate configuration might lead to divergence of the simulation and increases the overhead cost of the simulation.
+	    \item The process of identifying the optimal configuration is a tedious and time-consuming task for the user due to diversity of solution configurations.
+	\end{itemize}    
+    }
+
+
+%%%%% RIGHT COLUMN %%%%%%%%%%%%%%%%%%%%%%
+    \column{0.5}
+    
+	\block{Methodology}
+    {
+	\begin{itemize}[noitemsep,topsep=0pt]
+	    \item The algorithm configuration problem of estimating the optimal configuration for the coupling tool for a given solid and fluid model is solved by Sequential Model-based Algorithm Configuration (SMAC) approach in this study.
+	    \item The instances are the fluid and solid domain features extracted from the respective models provided by the user. The time consumed for the coupling process by MpCCI is used as a cost metric. 
+	    \item SMAC approach has been implemented similar to \cite{SMAC_mainpaper}  with the modifications for configuring the coupling tool MpCCI as shown in Algorithm 1.
+	\end{itemize}
+% $\newline$
+$\\$
+\begin{algorithm}[H]
+\LinesNumbered
+\SetAlgoLined
+\DontPrintSemicolon
+\caption{SMAC extension for multiphysics simulations}
+\label{algo:smac}
+\KwIn{Parameters, instances features ($x$) obtained from the solid domain models, fluid domain models and coupling properties. }
+\KwResult{Regression model for prediction}
+\color{red}\ForEach{Instance $i$}{
+\color{black} [$R_i$, $\theta_{i,inc}$] $\leftarrow$ Initialize($\theta_{default}$,  $x_i$)\\
+\color{black} \Repeat{total time budget for configuration exhausted}{
+\STATE [$m_i$, $t_{fit}$] $\leftarrow$ FitModel($R_i$)\\
+\STATE [$\Theta_{i,new}$, $t_{select}$] $\leftarrow$ SelectConfigurations($m_i$, $\theta_{i,inc}$, $\Theta_i$)\\
+\STATE [$R_i$, $\theta_{i,inc}$] $\leftarrow$ Intensify($\Theta_{i,new}$, $\theta_{i,inc}$, $m_i$, $R_i$, $t_{fit} + t_{select}$, $x_i $, $\hat c_i$)\\}
+\Return{$R_i$}}
+R $\leftarrow$ list of all $R_i$\\
+R $\leftarrow$ \textbf{Normalize\_cost}(R($\theta_{i}$, $x_i$, $\hat c_i$), $c_{i,inc}$)\\
+Train regression model, \textbf{$m$} using $R$ and respective features $x$.
+\end{algorithm}
+\DecMargin{1em}
+$\\$
+The regression model, $m$, is used to predict the optimal parameter configuration for the user provided instances. 
+} 
+
+	\block{Conclusion}
+    {
+In this study our SMAC-MpCCI advisor tool is being developed to help the user with a suitable simulation configuration. The future work aims to implement machine learning models such as decision tree, SVM and genetic algorithm along with the already implemented random-forest for the model training phase.
+    }  
+    
+    \block{References}
+    {
+    
+    \small
+    
+		\nocite{SMAC_mainpaper} 
+		\nocite{MpCCI_documentation}
+		    
+    		\begingroup
+			\renewcommand\refname{\vskip -2cm}
+	    		\bibliography{references}
+			\bibliographystyle{plain}
+		\endgroup
+    }
+    
+    \block{Acknowledgement}
+    {
+    	\small
+		We gratefully acknowledge the continued support of Dr. Paul G. Plöger, Klaus Wolf, Pascal Bayrasy, Ahmad Delforouzi, Santosh Thoduka and Deebul Nair.
+    }
+    
+    \block{Contact}
+    {
+   
+	\begin{minipage}{0.60\linewidth}
+	\small
+	    \textbf{Hamid Arjmandi}\\
+	    Fraunhofer Institute for Algorithms \\and Scientific Computing (SCAI)\\
+	    Sankt Augustin 53757\\
+	    Email: hamid.arjmandi@scai.fraunhofer.de
+    	
+	\end{minipage}
+	\begin{minipage}{0.14\linewidth}
+		\begin{tabular}{ r l }
+	    \end{tabular}
+    \end{minipage}
+    \begin{minipage}{0.24\linewidth}
+    		\flushright
+		\includegraphics[height=4cm]{gfx/hamid.eps}
+    \end{minipage}
+	\begin{minipage}{0.60\linewidth}
+	\small
+	    \textbf{Deepan Chakravarthi Padmanabhan}\\
+	    Masters Autonomous systems\\
+    	Bonn-Rhein-Sieg University of Applied Sciences\\
+    	Sankt Augustin 53757\\
+    	Email: deepan.padmanabhan@smail.inf.h-brs.de
+	\end{minipage}
+	\begin{minipage}{0.14\linewidth}
+		\begin{tabular}{ r l }
+
+	    \end{tabular}
+    \end{minipage}
+    	\begin{minipage}{0.24\linewidth}
+    		\flushright
+		\includegraphics[height=4cm]{gfx/deepan.eps}
+    \end{minipage}
+    }
+\end{columns}
+
+
+%%%%% FOOTER %%%%%%%%%%%%%%%%%%%%%%
+% \block{}
+% {
+% \begin{tikzpicture}[remember picture,overlay] 
+
+% 	\node [shift={(12.5cm, 4cm)}] at (current page.south west) {\includegraphics[height=4cm]{gfx/fraunhofer-logo.png}};
+% \end{tikzpicture}
+% }
+
+ 
+\end{document}
+
